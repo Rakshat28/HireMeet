@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import ConvexClerkProvider from "@/components/providers/ConvexClerkProvider"
+import { SignedIn,SignedOut,RedirectToSignIn } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import Navbar from "@/components/ui/Navbar";
 import localFont from "next/font/local";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -26,11 +30,27 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          {children}
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SignedIn>
+              <div className="flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+            </div>
+            </SignedIn>
+            <SignedOut>
+              <RedirectToSignIn></RedirectToSignIn>
+            </SignedOut>
+          </ThemeProvider>
+          <Toaster></Toaster>
         </body>
       </html>
     </ConvexClerkProvider>
