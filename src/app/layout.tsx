@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import ConvexClerkProvider from "@/components/providers/ConvexClerkProvider"
-import { SignedIn,SignedOut,RedirectToSignIn } from "@clerk/nextjs";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import Navbar from "@/components/ui/Navbar";
 import localFont from "next/font/local";
-import { Toaster } from "react-hot-toast";
+import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "./globals.css";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import ConvexClerkProvider from "@/components/providers/ConvexClerkProvider";
+import Navbar from "@/components/ui/Navbar";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,10 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <ConvexClerkProvider>
-        <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -41,16 +40,17 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <SignedIn>
-              <div className="flex min-h-screen flex-col">
-              <Navbar />
-              <main className="flex-1">{children}</main>
-            </div>
+              <div className="min-h-screen">
+                <Navbar />
+                <main className="px-4 sm:px-6 lg:px-8">{children}</main>
+              </div>
             </SignedIn>
+
             <SignedOut>
-              <RedirectToSignIn></RedirectToSignIn>
+              <RedirectToSignIn />
             </SignedOut>
           </ThemeProvider>
-          <Toaster></Toaster>
+          <Toaster />
         </body>
       </html>
     </ConvexClerkProvider>
